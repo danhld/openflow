@@ -1,0 +1,5 @@
+/openflow.exe
+/out
+/simulations
+*.pdf
+/scenarios/results

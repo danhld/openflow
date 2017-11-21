@@ -26,7 +26,7 @@ simple OFA_controller
         int port = default(1000);
         @display("i=block/app");
         double serviceTime @unit("s") = default(0s);
-        
+        //declaring signals here is just to pass the signals-checking, otherwise we must disable it by check-signals = false in .ini files  
         @signal[connID]; 
         @signal[PacketIn]; 
         

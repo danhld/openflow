@@ -20,6 +20,7 @@ import inet.node.inet.Router;
 import inet.node.inet.StandardHost;
 import inet.common.misc.ThruputMeteringChannel;
 import inet.networklayer.configurator.ipv4.FlatNetworkConfigurator;
+import inet.networklayer.configurator.ipv4.IPv4NetworkConfigurator; //use IPv4NetworkConfigurator instead of FlatNetworkConfigurator
 
 
 import openflow.nodes.*;
@@ -43,7 +44,8 @@ network Scenario_Small
         server1: StandardHost {
             @display("p=376,98");
         }
-        configurator: FlatNetworkConfigurator {
+//        configurator: FlatNetworkConfigurator {
+        configurator: IPv4NetworkConfigurator {
             parameters:
                 @display("p=195,236");
         }

@@ -22,7 +22,7 @@ package openflow.nodes;
 //import inet.transport.ITCP;
 //import inet.networklayer.contract.INetworkLayer;
 //import inet.networklayer.contract.IRoutingTable;
-//import inet.networklayer.common.InterfaceTable;
+import inet.networklayer.common.InterfaceTable;
 
 import inet.transportlayer.contract.ITCP;
 import inet.linklayer.ppp.PPPInterface;
@@ -38,7 +38,9 @@ import openflow.ctrlApps.*;
 module Open_Flow_Controller
 {
     parameters:
-        @node();
+        
+//        @node(); 
+		@networkNode; //Inet 3.6 changed @node to @networkNode
         @labels(node,ethernet-node);
         @display("i=device/server;bgb=843,453;i2=OpenFlow-Logo-small");
         int numTcpApps = default(0);
@@ -64,6 +66,8 @@ module Open_Flow_Controller
         bool hasUdp = default(numUdpApps > 0);
         bool hasSctp = default(numSctpApps > 0);
         bool forwarding = default(false);  // disable routing by default
+        *.interfaceTableModule = default(absPath(".interfaceTable"));
+        *.routingTableModule = default(absPath(".routingTable"));
 
     gates:
         inout ethg[] @labels(EtherFrame-conn);
@@ -88,7 +92,7 @@ module Open_Flow_Controller
         }
 
 
-        interfaceTable: EthernetInterface {
+        interfaceTable: InterfaceTable { 
             parameters:
                 @display("p=51,216;i=block/table");
         }

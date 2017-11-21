@@ -27,6 +27,9 @@ simple OFA_controller
         @display("i=block/app");
         double serviceTime @unit("s") = default(0s);
         
+        @signal[connID]; 
+        @signal[PacketIn]; 
+        
     gates:
         input tcpIn @labels(TCPCommand/up);
         output tcpOut @labels(TCPCommand/down);

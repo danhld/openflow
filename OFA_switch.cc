@@ -108,8 +108,6 @@ void OFA_switch::handleTimer(cMessage *msg)
         EV << "starting session\n";
         connect(); // active OPEN
 
-
-
         break;
 
     case MSGKIND_SEND:
@@ -193,18 +191,31 @@ void OFA_switch::handlePacket()
 void OFA_switch::connect()
 {
     socket.renewSocket();
-
-    const char *connectAddress = par("connectAddress");
     int connectPort = par("connectPort");
+    /*
+    const char *connectAddress; // = par("connectAddress");
+
+    EV << "connectAddress  = " << connectAddress << " connectPort =" << connectPort << endl;
 
 
-    if (getParentModule()->getParentModule()->getSubmodule("controller") != NULL)
+   // if (getParentModule()->getParentModule()->getSubmodule("controller") != NULL)
     {
         // multiple controllers; full path is needed for connect address
-        connectAddress = getParentModule()->getParentModule()->getSubmodule("controller")->getFullPath().c_str();
+//        connectAddress = (getParentModule()->getParentModule())->getSubmodule("controller")->getFullPath().c_str();
+        cModule *ctl = getSystemModule()->getSubmodule("controller");
+        if(ctl != NULL) {
+            EV << "ctl->getFullPath() = " << ctl->getFullPath().c_str() << endl;
+            connectAddress = ctl->getFullPath().c_str();
+        }
+        EV << "After: connectAddress  = " << connectAddress << endl;
     }
+    */
 
-    socket.connect(L3AddressResolver().resolve(connectAddress), connectPort);
+    L3Address ctlIPAddr;
+    EV << "connect L3Address  = " << L3AddressResolver().tryResolve("controller", ctlIPAddr) << endl;
+//    EV << "result: connectAddress  = " << ctlIPAddr << endl;
+//    socket.connect(L3AddressResolver().resolve(connectAddress), connectPort);
+    socket.connect(ctlIPAddr, connectPort);
 
 }
 

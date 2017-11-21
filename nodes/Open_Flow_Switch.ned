@@ -54,7 +54,8 @@ import openflow.*;
 module Open_Flow_Switch
 {
     parameters:
-        @node();
+//        @node(); 
+		@networkNode; //Inet 3.6 changed @node to @networkNode
         @OF_Switch();
         @labels(node,ethernet-node);
         @display("i=device/switch;i2=OpenFlow-Logo-small");
@@ -71,19 +72,21 @@ module Open_Flow_Switch
         int numExtInterfaces = default(0);
         bool sendCompletePacket = default(false);
         double serviceTime @unit("s") = default(0s);
-        
+
         //DANH added:
         bool hasTcp = default(numTcpApps > 0);
         bool hasUdp = default(numUdpApps > 0);
         bool hasSctp = default(numSctpApps > 0);
+        *.interfaceTableModule = default(absPath(".interfaceTable"));
+        *.routingTableModule = default(absPath(".routingTable"));
     gates:
         inout gate_controller[] @labels(Controller-conn);
         inout ethg[] @labels(EtherFrame-conn);
     submodules:
-//        notificationBoard: NotificationBoard {
-//            parameters:
-//                @display("p=57,54");
-//        }
+        //        notificationBoard: NotificationBoard {
+        //            parameters:
+        //                @display("p=57,54");
+        //        }
         interfaceTable: InterfaceTable {
             parameters:
                 @display("p=57,134");
@@ -116,12 +119,12 @@ module Open_Flow_Switch
         }
         etherMAC[sizeof(ethg)]: EtherMAC {
             parameters:
-                @display("p=192,383");
-                doRegisterAtIft = false;
+                @display("p=137,390");
+                doRegisterAtIft = false; // this is to prevent OF-Switch from registering to interface table
         }
 
         open_Flow_Processing: Open_Flow_Processing {
-            @display("p=192,262");
+            @display("p=137,282");
             serviceTime = serviceTime;
             gates:
                 ifIn[sizeof(ethg)];
